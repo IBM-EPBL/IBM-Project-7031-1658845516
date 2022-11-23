@@ -11,12 +11,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha512.js"></script>
+
     <title>Smart Waste Mangement System</title>
 
 
@@ -27,56 +23,103 @@
     <script>
         $(document).ready(function () {
             $('.login').hide();
+            $('.nodeRedUi').hide();
+            $('#registerAlert').hide();
+            $('#loginAlert').hide();
         });
+    </script>
+
+    <script>
+        function getValue(id) {
+            return document.getElementById(id).value;
+        }
+
+        function confirmPassword() {
+            if (getValue('registerPassword') === getValue('confirmRegisterPassword'))
+                register();
+            else
+                $('#registerAlert').show();
+        }
+
+        function register() {
+            let emailId = getValue('registerEmail');
+            let password = getValue('registerPassword');
+            localStorage.setItem(emailId, password.trim());
+            $('.register').hide();
+            $('.login').show();
+        }
+
+        function login() {
+            let emailId = getValue('loginEmail')
+            let password = getValue('loginPassword')
+
+            if (localStorage.getItem(emailId) === password) {
+                $('.login').hide();
+                $('.nodeRedUi').show();
+            } else {
+                $('#loginAlert').show();
+            }
+        }
     </script>
 
     <h1 class="text-center p-5 bg-light text-success">Smart Waste Management Portal</h1>
 
     <div class="container w-50 register">
-        <h1 class="text-center p-3 bg-dark text-light">Register</h1>
-        <form class="bg-light p-3">
+        <h1 class="text-center p-3 bg-dark text-light" onsubmit="confirmPassword()">Register</h1>
+        <form class="bg-light p-3" onsubmit="confirmPassword()">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Enter email" requierd>
+                <input type="email" class="form-control" id="registerEmail" aria-describedby="emailHelp"
+                    placeholder="Enter email" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword2">Confirm Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password"
+                <input type="password" class="form-control" id="confirmRegisterPassword" placeholder="Confirm Password"
                     required>
+            </div>
+            <div class="alert alert-danger" id="registerAlert" role="alert">
+                Passwords not matching !!
             </div>
             <div class="form-group">
                 <small><a href="#" onclick="$('.register').hide(); $('.login').show()">Already a user?</a></small>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 
     <div class="container w-50 p-5 login">
         <h1 class="text-center p-3 bg-dark text-light">Login</h1>
-        <form class="bg-light p-3">
+        <form class="bg-light p-3" onsubmit="login()">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp"
                     placeholder="Enter email" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Save Email Address</label>
             </div>
+            <div class="alert alert-danger" id="loginAlert" role="alert">
+                Password incorrect !!
+            </div>
             <div class="form-group">
                 <small><a href="#" onclick="$('.login').hide(); $('.register').show()">New user?</a></small>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Login</button>
         </form>
+    </div>
+
+    <div class="container nodeRedUi">
+        <h1 class="text-center">Node Red UI</h1>
+        <iframe src="https://node-red-gnlun-2022-11-03.eu-gb.mybluemix.net/ui" height="500" width="1000"></iframe>
     </div>
 
 </body>
