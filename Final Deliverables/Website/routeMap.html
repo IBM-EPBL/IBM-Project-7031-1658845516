@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Route</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script src="init.js"></script>
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container"></div>
+    <div id="map"></div>
+
+    <script>
+        let coords = [];
+        ref.on("value", function (snapshot) {
+            var data;
+            snapshot.forEach(function (childSnapshot) {
+                data = childSnapshot.val();
+
+                Object.keys(data).forEach(function (bin) {
+                    coords.push([data[bin].data.longitude, data[bin].data.latitude]);
+                })
+            });
+
+            coords.forEach(function (point) {
+                console.log(point)
+                new mapboxgl.Marker({ color: 'black' })
+                    .setLngLat(point)
+                    .addTo(map);
+            })
+        }, function (error) {
+            console.log("Error: " + error.code);
+        });
+
+    </script>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm91bmRsZXNzYmxvZ2dlcnMiLCJhIjoiY2wzYmhwejM3MDJobTNicGo4bm1wZzVvcyJ9.Vd4Z9oCiYAwmb19iNeiJbw';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [80, 13],
+            zoom: 8
+        });
+
+    </script>
+
+</body>
+
+</html>
